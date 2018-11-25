@@ -17,6 +17,8 @@ passdir="$HOME/.password-store/"
 # /home/user/.password-store/subfolder/pass3_user.gpg"
 # /home/user/.password-store/subfolder/pass3_pass.gpg"
 
+# non interactive mode:
+# ./passopen.sh subfolder/pass3_
 
 if [ $# -eq 1 ]; then
     
@@ -37,7 +39,7 @@ if [ $# -eq 1 ]; then
     echo "copy_pass"
     pass -c "$1pass"
     if [ $? -ne 0 ]; then
-        exit 1
+        exit 2
     fi
     
     sleep 5
@@ -50,12 +52,16 @@ else
     echo "choose entry?:"
     read -e -p "" entry
     entry=${entry/".gpg"/""}
-    entry=${entry/"_link"/"_"}
-    entry=${entry/"_user"/"_"}
-    entry=${entry/"_pass"/"_"}
-    $startdir/passopen.sh $entry
+    shortened_entry=${entry/"_link"/"_"}
+    shortened_entry=${shortened_entry/"_user"/"_"}
+    shortened_entry=${shortened_entry/"_pass"/"_"}
+    $startdir/passopen.sh $shortened_entry
+    if [ $? -eq 1 ]; then
+        pass -c "$entry"
+        sleep 1
+    fi
     cd $startdir
     exit 0
 fi
 
-exit 2
+exit 3
