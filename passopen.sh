@@ -20,6 +20,10 @@ passdir="$HOME/.password-store/"
 # non interactive mode:
 # ./passopen.sh subfolder/pass3_
 
+# for .desktop file:
+# activate "Run in Terminal"
+# and set workpath as path of the script file.
+
 if [ $# -eq 1 ]; then
     
     echo "try_link $passdir/$1link.gpg"
